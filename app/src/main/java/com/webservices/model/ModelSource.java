@@ -7,5 +7,5 @@ package com.webservices.model;
 
 public interface ModelSource {
 
-    String getJson(String src);
+    String getJson();
 }

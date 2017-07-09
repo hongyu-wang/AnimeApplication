@@ -3,6 +3,7 @@ package com.main;
 import android.util.JsonReader;
 
 import com.google.gson.Gson;
+import com.singletons.GsonSingleton;
 import com.webservices.api_auth.ApiData;
 import com.webservices.api_auth.ApiImplementation;
 
