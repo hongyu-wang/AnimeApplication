@@ -1,7 +1,13 @@
 package com.main;
 
+import android.util.JsonReader;
+
+import com.google.gson.Gson;
 import com.webservices.api_auth.ApiData;
 import com.webservices.api_auth.ApiImplementation;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -15,6 +21,8 @@ public class Main {
         //AMHmaSPrkHpAq6H8VxAUGZB5kZyc4TDoJaEbmQir
         System.out.println("https://anilist.co/api/auth/access_token?grant_type=client_credentials&"
                 +"client_id" + data.getClientID() + "client_secret" + data.getClientSecret());
+
+
     }
 
 }
