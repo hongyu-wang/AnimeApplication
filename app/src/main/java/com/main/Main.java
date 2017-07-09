@@ -1,7 +1,7 @@
 package com.main;
 
-import com.webservices.ApiData;
-import com.webservices.ApiImplementation;
+import com.webservices.api_auth.ApiData;
+import com.webservices.api_auth.ApiImplementation;
 
 /**
  *
@@ -12,7 +12,9 @@ public class Main {
 
     public static void main (String args []){
         ApiData data = new ApiImplementation();
-        System.out.println(data.getUrl());
+        //AMHmaSPrkHpAq6H8VxAUGZB5kZyc4TDoJaEbmQir
+        System.out.println("https://anilist.co/api/auth/access_token?grant_type=client_credentials&"
+                +"client_id" + data.getClientID() + "client_secret" + data.getClientSecret());
     }
 
 }
