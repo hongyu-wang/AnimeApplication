@@ -16,8 +16,12 @@ import java.net.URLEncoder;
 public class QueryString {
     private String query;
 
-    public QueryString(String urlSection) {
+    private RequestType requestType;
+
+
+    public QueryString(String urlSection, RequestType req) {
         query = urlSection + "?";
+        this.requestType = req;
 
     }
 
@@ -38,7 +42,9 @@ public class QueryString {
         }
     }
 
-
+    public RequestType getRequestType() {
+        return requestType;
+    }
 
     public String toString() {
         return query;

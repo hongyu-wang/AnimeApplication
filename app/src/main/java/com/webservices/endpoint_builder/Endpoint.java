@@ -33,15 +33,13 @@ public class Endpoint implements ModelSource{
     /**
      *
      * @param queryString arguments that go in the query string
-     * @param type GET or POST
      * @return the Endpoint Object to get the specific JSON
      */
     public static Endpoint endpointFactory(
 
-            QueryString queryString,
-            RequestType type
+            QueryString queryString
     ){
-        return new Endpoint(BASE_ENDPOINT + queryString, type);
+        return new Endpoint(BASE_ENDPOINT + queryString, queryString.getRequestType());
     }
 
     private RequestType type;

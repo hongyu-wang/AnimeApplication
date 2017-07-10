@@ -2,6 +2,7 @@ package com.webservices.model;
 
 import com.singletons.CredentialSingleton;
 import com.webservices.endpoint_builder.QueryString;
+import com.webservices.endpoint_builder.RequestType;
 
 import java.io.Serializable;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
 
 public class ClientCredModel implements Serializable{
     public static QueryString getQueryString(){
-        QueryString queryString = new QueryString("auth/access_token");
+        QueryString queryString = new QueryString("auth/access_token", RequestType.POST);
         queryString.add("grant_type", "client_credentials");
         queryString.add("client_id", CredentialSingleton.get().getClientID());
         queryString.add("client_secret", CredentialSingleton.get().getClientSecret());
