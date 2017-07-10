@@ -1,5 +1,9 @@
 package com.webservices.model;
 
+import com.singletons.ApiDataSingleton;
+import com.webservices.api_auth.ApiData;
+import com.webservices.endpoint_builder.QueryString;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +12,15 @@ import java.io.Serializable;
  */
 
 public class ClientCredModel implements Serializable{
+    public static QueryString getQueryString(){
+        QueryString queryString = new QueryString("auth/access_token");
+        queryString.add("grant_type", "client_credentials");
+        queryString.add("client_id", ApiDataSingleton.get().getClientID());
+        queryString.add("client_secret", ApiDataSingleton.get().getClientSecret());
+        return queryString;
+    }
+
+
 
     private String access_token;
 

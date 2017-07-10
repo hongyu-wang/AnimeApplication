@@ -14,15 +14,17 @@ import java.net.URLEncoder;
  */
 
 public class QueryString {
+    private String query;
 
-    private String query = "";
+    public QueryString(String urlSection) {
+        query = urlSection + "?";
 
-    public QueryString(String name, String value) {
-        encode(name, value);
     }
 
     public void add(String name, String value) {
+        if(!query.substring(query.length() -1).equals("?"))
         query += "&";
+
         encode(name, value);
     }
 
