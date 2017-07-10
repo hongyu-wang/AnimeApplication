@@ -47,7 +47,6 @@ public class Endpoint implements ModelSource{
     private URL url;
 
     private Endpoint(String url, RequestType type){
-        System.out.println("Endpoint.Endpoint: " + url);
         try {
             this.url = new URL(url);
         } catch (MalformedURLException e) {

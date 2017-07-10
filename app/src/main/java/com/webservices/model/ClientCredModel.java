@@ -22,13 +22,13 @@ public class ClientCredModel implements Serializable{
 
 
 
-    private String access_token;
+    private String accessToken;
 
-    private String token_type;
+    private String tokenType;
 
     private int expires;
 
-    private int expires_in;
+    private int expiresIn;
 
 
 

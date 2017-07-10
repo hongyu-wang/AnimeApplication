@@ -16,27 +16,30 @@ import java.lang.reflect.Method;
 public final class ModelFactory {
 
 
+
     //This is the current client for the model
     private static ClientCredModel currentClient;
 
-    public static <T> T getModel(Class<T> className) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method method;
+    public static <T> T getModel(Class<T> className) {
+    
 
-        method = className.getMethod("getQueryString");
+        try {
+            Method method;
+
+            method = className.getMethod("getQueryString");
 
 
-        ModelSource m = Endpoint.endpointFactory((QueryString) method.invoke(null));
-        return GsonSingleton.get().fromJson(m.getJson(), className);
+            ModelSource m = Endpoint.endpointFactory((QueryString) method.invoke(null));
+            return GsonSingleton.get().fromJson(m.getJson(), className);
+        } catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static <T> T getGetModel(Class<T> className){
-        ModelSource m = Endpoint.endpointFactory(ClientCredModel.getQueryString());
-        return GsonSingleton.get().fromJson(m.getJson(), className);
-    }
 
     public static void init(){
-
-
+        currentClient = ModelFactory.getModel(ClientCredModel.class);
     }
 
 }
