@@ -8,7 +8,7 @@ import com.webservices.api_auth.ApiImplementation;
  * Created by hongy on 7/9/2017.
  */
 
-public class ApiDataSingleton {
+public class CredentialSingleton {
     private static ApiData instance;
 
     public static ApiData get(){
