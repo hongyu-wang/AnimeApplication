@@ -5,4 +5,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="nav_genres">Genres</string>
     <string name="nav_popular">Popular</string>
+    <string name="temp_header">Username</string>
+    <string name="placeholder">something</string>
 </resources>
