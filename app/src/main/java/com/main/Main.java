@@ -17,7 +17,7 @@ public class Main {
     public static void main (String args []) throws ExecutionException, InterruptedException {
 
         ModelFactory.initTest();
-        GenreModel [] model = ModelFactory.getModelList(GenreModel.class);
+        BasicSeriesModel [] model = ModelFactory.getModelList(BasicSeriesModel.class, "Cowboy+Bebop");
     }
 
 }
