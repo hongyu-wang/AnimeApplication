@@ -26,31 +26,31 @@ public class BasicSeriesModel implements Model {
     }
 
 
-    private int id;
-    private String seriesType;
-    private String titleRomaji;
-    private String titleEnglish;
-    private String titleJapanese;
-    private String type;
-    private String startDate;
-    private String endDate;
-    private int startDateFuzzy;
-    private int endDateFuzzy;
-    private int season;
-    private String description;
-    private List<String> synonyms;
-    private List<String> genres;
-    private boolean adult;
-    private double averageScore;
-    private int popularity;
-    private boolean favourite;
-    private String imageUrlSml;
-    private String imageUrlMed;
-    private String imageUrlLge;
-    private String imageUrlBanner;
-    private int updatedAt;
-    private Map<String, Integer> scoreDistribution;
-    private Map<String, Integer> listStats;
+    protected int id;
+    protected String seriesType;
+    protected String titleRomaji;
+    protected String titleEnglish;
+    protected String titleJapanese;
+    protected String type;
+    protected String startDate;
+    protected String endDate;
+    protected int startDateFuzzy;
+    protected int endDateFuzzy;
+    protected int season;
+    protected String description;
+    protected List<String> synonyms;
+    protected List<String> genres;
+    protected boolean adult;
+    protected double averageScore;
+    protected int popularity;
+    protected boolean favourite;
+    protected String imageUrlSml;
+    protected String imageUrlMed;
+    protected String imageUrlLge;
+    protected String imageUrlBanner;
+    protected int updatedAt;
+    protected Map<String, Integer> scoreDistribution;
+    protected Map<String, Integer> listStats;
 
     public int getId() {
         return id;
