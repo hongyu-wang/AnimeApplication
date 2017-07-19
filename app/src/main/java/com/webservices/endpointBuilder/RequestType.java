@@ -20,4 +20,6 @@ public enum RequestType {
     RequestType(String type) {
         this.type = type;
     }
+
 }
+

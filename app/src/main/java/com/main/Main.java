@@ -14,7 +14,7 @@ public class Main {
 
     public static void main (String args []) throws ExecutionException, InterruptedException {
 
-        ModelFactory.init();
+        ModelFactory.initTest();
         ModelFactory.getModel(BasicSeriesModel.class);
     }
 

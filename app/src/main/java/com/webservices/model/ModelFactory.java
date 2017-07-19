@@ -1,5 +1,7 @@
 package com.webservices.model;
 
+import android.os.AsyncTask;
+
 import com.singletons.GsonSingleton;
 import com.webservices.endpointBuilder.Endpoint;
 import com.webservices.endpointBuilder.QueryString;
@@ -39,7 +41,11 @@ public final class ModelFactory {
     }
 
 
-    public static void init() throws ExecutionException, InterruptedException {
+    public static void initTest(){
+        currentClient = getModel(ClientCredModel.class);
+    }
+
+    public static void initAndroid() throws ExecutionException, InterruptedException {
         /*
         AsyncTask<Class<ClientCredModel>, Void, ClientCredModel> XD = new AsyncTask<Class<ClientCredModel>, Void, ClientCredModel>() {
             @Override

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupClient() {
         try {
-            ModelFactory.init();
+            ModelFactory.initAndroid();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
