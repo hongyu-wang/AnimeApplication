@@ -1,16 +1,22 @@
 package com.webservices.model;
 
 
-import com.google.gson.reflect.TypeToken;
+import android.content.Context;
+import android.nfc.Tag;
+import android.util.Log;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.singletons.GsonSingleton;
-import com.webservices.endpointBuilder.Endpoint;
+import com.singletons.RequestQueueSingleton;
 import com.webservices.endpointBuilder.QueryString;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -19,27 +25,29 @@ import java.util.concurrent.ExecutionException;
  */
 
 public final class ModelFactory {
+    private static final String TAG = "ModelFactory";
 
+
+    //This is the current client for the model
+    private static ClientCredModel currentClient;
     public static ClientCredModel getCurrentClient() {
         return currentClient;
     }
 
-    //This is the current client for the model
-    private static ClientCredModel currentClient;
+    private final static String BASE_ENDPOINT = "https://anilist.co/api/";
 
-
-    private static <T extends Model> Endpoint getEndpoint(Class<T> className, String ... args){
-        Endpoint m = null;
+    private static <T extends Model> QueryString getEndpoint(Class<T> className, String ... args){
+        QueryString m = null;
         Method method;
         try {
 
             method = className.getMethod("getQueryString", String [].class);
-            m = Endpoint.endpointFactory((QueryString) method.invoke(null, new Object[]{args}));
+            m = (QueryString) method.invoke(null, new Object[]{args});
 
         } catch (NoSuchMethodException e) {
             try {
                 method = className.getMethod("getQueryString");
-                m = Endpoint.endpointFactory((QueryString) method.invoke(null));
+                m = (QueryString) method.invoke(null);
 
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -54,39 +62,53 @@ public final class ModelFactory {
         return m;
     }
 
-    public static <T extends Model> T [] getModelList(Class<T> className, String ... args){
-        String json = getEndpoint(className, args).getJson();
 
-
-
-        return (T [])GsonSingleton.get().fromJson(json , Array.newInstance(className, 0).getClass());
-
-    }
-
-    public static <T extends Model> T getModel(Class<T> className, String ... args) {
-        return GsonSingleton.get().fromJson(getEndpoint(className, args).getJson(), className);
-    }
-
-
-    public static void initTest(){
-        currentClient = getModel(ClientCredModel.class);
-    }
-
-    public static void initAndroid() throws ExecutionException, InterruptedException {
-        /*
-        AsyncTask<Class<ClientCredModel>, Void, ClientCredModel> XD = new AsyncTask<Class<ClientCredModel>, Void, ClientCredModel>() {
-            @Override
-            protected ClientCredModel doInBackground(Class<ClientCredModel>... classes) {
-                return ModelFactory.getModel(classes[0]);
-            }
-            protected void onPostExecute(ClientCredModel result) {
-                if (result != null) {
-                    ModelFactory.setCurrentClient(result);
+    public static <T extends Model> void requestModelList(Context context, final Class<T> className, String ... args){
+        QueryString url = getEndpoint(className, args);
+        StringRequest request = new StringRequest(
+                url.getRequestType(),
+                BASE_ENDPOINT + url.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        EventBus.getDefault().post(
+                                GsonSingleton.get().fromJson(response ,
+                                        Array.newInstance(className, 0).getClass()));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
                 }
-            }
-        };*/
-        RetrieveModelTask<ClientCredModel> xd = new RetrieveModelTask<>();
-        currentClient = xd.execute(ClientCredModel.class).get();
+        );
+        RequestQueueSingleton.get(context).add(request);
+
     }
 
+    public static <T extends Model> void requestModel(Context context, final Class<T> className, String ... args) {
+        QueryString url = getEndpoint(className, args);
+        StringRequest request = new StringRequest(
+                url.getRequestType(),
+                BASE_ENDPOINT + url.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        EventBus.getDefault().post(GsonSingleton.get().fromJson(response, className));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        );
+        RequestQueueSingleton.get(context).add(request);
+    }
+
+    public static void setCurrentClient(ClientCredModel currentClient) {
+        ModelFactory.currentClient = currentClient;
+    }
 }

@@ -4,7 +4,7 @@ import com.webservices.endpointBuilder.QueryString;
 import com.webservices.model.Model;
 import com.webservices.model.ModelFactory;
 
-import static com.webservices.endpointBuilder.RequestType.GET;
+import static com.android.volley.Request.Method.GET;
 
 /**
  *

@@ -7,25 +7,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.webservices.endpointBuilder.QueryString;
+import com.webservices.model.ClientCredModel;
 import com.webservices.model.ModelFactory;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     private NavigationView navView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle drawerToggle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setupClient();
+        Log.d(TAG, "Main Activity Starting!");
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_main);
-
         // Set up the navigation drawer
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,17 +54,19 @@ public class MainActivity extends AppCompatActivity {
 
         drawer.addDrawerListener(drawerToggle);
         setupDrawerContent(navView);
-
+        ModelFactory.requestModel(this, ClientCredModel.class);
     }
 
-    private void setupClient() {
-        try {
-            ModelFactory.initAndroid();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    //Le spooky
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ClientCredModel model){
+        Log.d(TAG, "ClientCredEvent");
+        ModelFactory.setCurrentClient(model);
     }
 
     private void setupDrawerContent(NavigationView navView) {

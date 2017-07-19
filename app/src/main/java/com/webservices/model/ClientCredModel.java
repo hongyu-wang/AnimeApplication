@@ -2,18 +2,19 @@ package com.webservices.model;
 
 import com.singletons.CredentialSingleton;
 import com.webservices.endpointBuilder.QueryString;
-import com.webservices.endpointBuilder.RequestType;
 
 import java.io.Serializable;
+
+import static com.android.volley.Request.Method.POST;
 
 /**
  *
  * Created by hongy on 7/9/2017.
  */
 
-public class ClientCredModel implements Serializable, Model{
+public class ClientCredModel implements Model {
     public static QueryString getQueryString(){
-        QueryString queryString = new QueryString("auth/access_token", RequestType.POST);
+        QueryString queryString = new QueryString("auth/access_token", POST);
         queryString.add("grant_type", "client_credentials");
         queryString.add("client_id", CredentialSingleton.get().getClientID());
         queryString.add("client_secret", CredentialSingleton.get().getClientSecret());

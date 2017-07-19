@@ -11,7 +11,7 @@ import com.google.gson.GsonBuilder;
 public class GsonSingleton {
     private static Gson gson;
 
-    public static Gson get(){
+    public synchronized static Gson get(){
         if (gson == null) gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.
                         LOWER_CASE_WITH_UNDERSCORES).create();

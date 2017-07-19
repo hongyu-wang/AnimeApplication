@@ -4,19 +4,17 @@ import com.webservices.endpointBuilder.QueryString;
 import com.webservices.model.Model;
 import com.webservices.model.ModelFactory;
 
-import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.webservices.endpointBuilder.RequestType.GET;
+import static com.android.volley.Request.Method.GET;
 
 /**
  *
  * Created by Han Yu on 2017-07-09.
  */
 
-public class BasicSeriesModel implements Serializable, Model {
+public class BasicSeriesModel implements Model {
 
 
 

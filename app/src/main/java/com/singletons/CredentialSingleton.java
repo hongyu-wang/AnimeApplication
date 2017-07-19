@@ -11,7 +11,7 @@ import com.webservices.apiAuth.ApiImplementation;
 public class CredentialSingleton {
     private static ApiData instance;
 
-    public static ApiData get(){
+    public synchronized static ApiData  get(){
         if (instance == null) instance = new ApiImplementation();
 
         return instance;

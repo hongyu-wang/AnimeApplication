@@ -1,5 +1,9 @@
 package com.webservices.endpointBuilder;
 
+import android.app.VoiceInteractor;
+
+import com.android.volley.Request;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -16,10 +20,10 @@ import java.net.URLEncoder;
 public class QueryString {
     private String query;
 
-    private RequestType requestType;
+    private int requestType;
 
 
-    public QueryString(String urlSection, RequestType req) {
+    public QueryString(String urlSection, int req) {
         query = urlSection + "?";
         this.requestType = req;
 
@@ -42,7 +46,7 @@ public class QueryString {
         }
     }
 
-    public RequestType getRequestType() {
+    public int getRequestType() {
         return requestType;
     }
 
