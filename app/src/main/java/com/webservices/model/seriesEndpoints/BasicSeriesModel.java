@@ -10,12 +10,13 @@ import java.util.Map;
 import static com.webservices.endpointBuilder.RequestType.GET;
 
 /**
+ *
  * Created by Han Yu on 2017-07-09.
  */
 
 public class BasicSeriesModel implements Serializable{
-    public static QueryString getQueryString(){
-        QueryString queryString = new QueryString("anime/1", GET);
+    public static QueryString getQueryString(String... args){
+        QueryString queryString = new QueryString("anime/" + args[0], GET);
         queryString.add("access_token", ModelFactory.getCurrentClient().getAccessToken());
         return queryString;
     }

@@ -6,7 +6,9 @@ import com.singletons.GsonSingleton;
 import com.webservices.endpointBuilder.Endpoint;
 import com.webservices.endpointBuilder.QueryString;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,21 +25,34 @@ public final class ModelFactory {
     //This is the current client for the model
     private static ClientCredModel currentClient;
 
-    public static <T> T getModel(Class<T> className) {
-
-
+    public static <T> T getModel(Class<T> className, String ... args) {
+        Endpoint m = null;
+        Method method;
         try {
-            Method method;
 
-            method = className.getMethod("getQueryString");
+            method = className.getMethod("getQueryString", String [].class);
+            m = Endpoint.endpointFactory((QueryString) method.invoke(null, new Object[]{args}));
 
+        } catch (NoSuchMethodException e) {
+            try {
+                method = className.getMethod("getQueryString");
+                m = Endpoint.endpointFactory((QueryString) method.invoke(null));
 
-            Endpoint m = Endpoint.endpointFactory((QueryString) method.invoke(null));
-            return GsonSingleton.get().fromJson(m.getJson(), className);
-        } catch(Exception e){
-            e.printStackTrace();
-            return null;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                System.exit(-1);
+            }
+        } catch (Exception e1){
+            e1.printStackTrace();
+            System.exit(-1);
+
         }
+
+
+        return GsonSingleton.get().fromJson(m.getJson(), className);
+
+
+
     }
 
 
