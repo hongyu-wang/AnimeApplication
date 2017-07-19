@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 import com.webservices.model.ModelFactory;
 
+import java.util.concurrent.ExecutionException;
+
 public class Main extends AppCompatActivity {
 
     private NavigationView navView;
@@ -20,8 +22,8 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ModelFactory.init();
 
+        setupClient();
         setContentView(R.layout.activity_main);
 
         // Set up the navigation drawer
@@ -39,6 +41,16 @@ public class Main extends AppCompatActivity {
         drawer.addDrawerListener(drawerToggle);
         setupDrawerContent(navView);
 
+    }
+
+    private void setupClient() {
+        try {
+            ModelFactory.init();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupDrawerContent(NavigationView navView) {

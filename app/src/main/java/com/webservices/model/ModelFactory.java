@@ -1,10 +1,11 @@
 package com.webservices.model;
 
 import com.singletons.GsonSingleton;
-import com.webservices.endpointBuilder.QueryString;
 import com.webservices.endpointBuilder.Endpoint;
+import com.webservices.endpointBuilder.QueryString;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -12,8 +13,6 @@ import java.lang.reflect.Method;
  */
 
 public final class ModelFactory {
-
-
 
     //This is the current client for the model
     private static ClientCredModel currentClient;
@@ -36,8 +35,21 @@ public final class ModelFactory {
     }
 
 
-    public static void init(){
-        currentClient = ModelFactory.getModel(ClientCredModel.class);
+    public static void init() throws ExecutionException, InterruptedException {
+        /*
+        AsyncTask<Class<ClientCredModel>, Void, ClientCredModel> XD = new AsyncTask<Class<ClientCredModel>, Void, ClientCredModel>() {
+            @Override
+            protected ClientCredModel doInBackground(Class<ClientCredModel>... classes) {
+                return ModelFactory.getModel(classes[0]);
+            }
+            protected void onPostExecute(ClientCredModel result) {
+                if (result != null) {
+                    ModelFactory.setCurrentClient(result);
+                }
+            }
+        };*/
+        RetrieveModelTask<ClientCredModel> xd = new RetrieveModelTask<>();
+        currentClient = xd.execute(ClientCredModel.class).get();
     }
 
 }
