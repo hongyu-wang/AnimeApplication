@@ -7,7 +7,7 @@ import android.os.AsyncTask;
  * Created by hongy on 7/9/2017.
  */
 
-public class RetrieveModelTask <T> extends AsyncTask<Class<T>, Void, T> {
+public class RetrieveModelTask <T extends Model> extends AsyncTask<Class<T>, Void, T> {
 
     @SafeVarargs
     @Override

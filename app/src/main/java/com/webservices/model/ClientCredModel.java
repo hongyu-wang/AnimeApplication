@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by hongy on 7/9/2017.
  */
 
-public class ClientCredModel implements Serializable{
+public class ClientCredModel implements Serializable, Model{
     public static QueryString getQueryString(){
         QueryString queryString = new QueryString("auth/access_token", RequestType.POST);
         queryString.add("grant_type", "client_credentials");

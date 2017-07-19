@@ -4,6 +4,7 @@ package com.main;
 import com.webservices.model.ModelFactory;
 import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -15,7 +16,8 @@ public class Main {
     public static void main (String args []) throws ExecutionException, InterruptedException {
 
         ModelFactory.initTest();
-        BasicSeriesModel model = ModelFactory.getModel(BasicSeriesModel.class, "7");
+        BasicSeriesModel [] model = ModelFactory.getModelList(BasicSeriesModel.class, "Cowboy+Bebop");
+        System.out.println(model[0].getTitleEnglish());
     }
 
 }
