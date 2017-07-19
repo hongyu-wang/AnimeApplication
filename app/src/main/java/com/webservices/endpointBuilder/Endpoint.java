@@ -1,13 +1,10 @@
-package com.webservices.endpoint_builder;
+package com.webservices.endpointBuilder;
 
-import com.singletons.GsonSingleton;
-import com.webservices.model.ClientCredModel;
 import com.webservices.model.ModelSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -67,33 +64,33 @@ public class Endpoint implements ModelSource{
     private void fix(){
         //todo: fix later
         /*
-         *  fix for
-         *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
-         *       sun.security.validator.ValidatorException:
-         *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
-         *               unable to find valid certification path to requested target
-         */
+        *  fix for
+        *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
+        *       sun.security.validator.ValidatorException:
+        *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+        *               unable to find valid certification path to requested target
+        */
         TrustManager[] trustAllCerts = new TrustManager[] {
-                new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-
-                    }
-
-                    @Override
-                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-
-                    }
-
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
-
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
 
                 }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+
+                }
+
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+
+            }
         };
 
         SSLContext sc = null;
@@ -111,15 +108,15 @@ public class Endpoint implements ModelSource{
 
         // Create all-trusting host name verifier
         HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
+        public boolean verify(String hostname, SSLSession session) {
+        return true;
+        }
         };
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
         /*
-         * end of the fix
-         */
+        * end of the fix
+        */
     }
 
 

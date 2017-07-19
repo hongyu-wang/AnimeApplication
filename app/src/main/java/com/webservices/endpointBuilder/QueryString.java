@@ -1,4 +1,4 @@
-package com.webservices.endpoint_builder;
+package com.webservices.endpointBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

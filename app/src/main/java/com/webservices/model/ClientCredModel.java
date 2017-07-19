@@ -1,8 +1,8 @@
 package com.webservices.model;
 
 import com.singletons.CredentialSingleton;
-import com.webservices.endpoint_builder.QueryString;
-import com.webservices.endpoint_builder.RequestType;
+import com.webservices.endpointBuilder.QueryString;
+import com.webservices.endpointBuilder.RequestType;
 
 import java.io.Serializable;
 

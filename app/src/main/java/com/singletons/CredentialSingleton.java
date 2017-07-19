@@ -1,7 +1,7 @@
 package com.singletons;
 
-import com.webservices.api_auth.ApiData;
-import com.webservices.api_auth.ApiImplementation;
+import com.webservices.apiAuth.ApiData;
+import com.webservices.apiAuth.ApiImplementation;
 
 /**
  *

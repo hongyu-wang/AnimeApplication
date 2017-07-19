@@ -1,11 +1,9 @@
 package com.webservices.model;
 
 import com.singletons.GsonSingleton;
-import com.webservices.endpoint_builder.Endpoint;
-import com.webservices.endpoint_builder.QueryString;
-import com.webservices.endpoint_builder.RequestType;
+import com.webservices.endpointBuilder.QueryString;
+import com.webservices.endpointBuilder.Endpoint;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -21,7 +19,7 @@ public final class ModelFactory {
     private static ClientCredModel currentClient;
 
     public static <T> T getModel(Class<T> className) {
-    
+
 
         try {
             Method method;

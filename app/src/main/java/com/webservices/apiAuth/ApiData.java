@@ -1,4 +1,4 @@
-package com.webservices.api_auth;
+package com.webservices.apiAuth;
 
 /**
  *

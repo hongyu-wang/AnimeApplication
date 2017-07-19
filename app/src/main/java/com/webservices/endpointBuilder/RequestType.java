@@ -1,4 +1,4 @@
-package com.webservices.endpoint_builder;
+package com.webservices.endpointBuilder;
 
 /**
  * Request Type

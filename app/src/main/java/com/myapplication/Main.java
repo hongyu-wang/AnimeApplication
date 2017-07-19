@@ -1,6 +1,7 @@
 package com.myapplication;
 
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +9,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.webservices.RetrieveModelTask;
+import com.webservices.model.ClientCredModel;
+import com.webservices.model.ModelFactory;
+import com.webservices.model.ModelSource;
+
+import java.util.concurrent.ExecutionException;
 
 public class Main extends AppCompatActivity {
 
@@ -18,6 +26,8 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         // Set up the navigation drawer
