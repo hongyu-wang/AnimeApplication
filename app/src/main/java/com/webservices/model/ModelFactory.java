@@ -1,12 +1,16 @@
 package com.webservices.model;
 
-import android.os.AsyncTask;
 
+import com.google.gson.reflect.TypeToken;
 import com.singletons.GsonSingleton;
 import com.webservices.endpointBuilder.Endpoint;
 import com.webservices.endpointBuilder.QueryString;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,21 +27,44 @@ public final class ModelFactory {
     //This is the current client for the model
     private static ClientCredModel currentClient;
 
-    public static <T> T getModel(Class<T> className) {
 
-
+    private static <T extends Model> Endpoint getEndpoint(Class<T> className, String ... args){
+        Endpoint m = null;
+        Method method;
         try {
-            Method method;
 
-            method = className.getMethod("getQueryString");
+            method = className.getMethod("getQueryString", String [].class);
+            m = Endpoint.endpointFactory((QueryString) method.invoke(null, new Object[]{args}));
 
+        } catch (NoSuchMethodException e) {
+            try {
+                method = className.getMethod("getQueryString");
+                m = Endpoint.endpointFactory((QueryString) method.invoke(null));
 
-            Endpoint m = Endpoint.endpointFactory((QueryString) method.invoke(null));
-            return GsonSingleton.get().fromJson(m.getJson(), className);
-        } catch(Exception e){
-            e.printStackTrace();
-            return null;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                System.exit(-1);
+            }
+        } catch (Exception e1){
+            e1.printStackTrace();
+            System.exit(-1);
+
         }
+
+        return m;
+    }
+
+    public static <T extends Model> T [] getModelList(Class<T> className, String ... args){
+        String json = getEndpoint(className, args).getJson();
+
+
+
+        return (T [])GsonSingleton.get().fromJson(json , Array.newInstance(className, 0).getClass());
+
+    }
+
+    public static <T extends Model> T getModel(Class<T> className, String ... args) {
+        return GsonSingleton.get().fromJson(getEndpoint(className, args).getJson(), className);
     }
 
 

@@ -133,7 +133,8 @@ public class Endpoint {
             connection.setRequestMethod(type.toString());
             connection.setDoOutput(true);
 
-
+            System.err.print(connection.getResponseCode() + ": ");
+            System.err.println(url.toString());
 
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(connection.getInputStream())
