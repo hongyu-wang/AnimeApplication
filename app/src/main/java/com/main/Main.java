@@ -2,6 +2,9 @@ package com.main;
 
 
 import com.webservices.model.ModelFactory;
+import com.webservices.model.seriesEndpoints.BasicSeriesModel;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -9,8 +12,10 @@ import com.webservices.model.ModelFactory;
          */
 public class Main {
 
-    public static void main (String args []){
+    public static void main (String args []) throws ExecutionException, InterruptedException {
+
         ModelFactory.init();
+        ModelFactory.getModel(BasicSeriesModel.class);
     }
 
 }

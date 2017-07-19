@@ -14,6 +14,10 @@ import java.util.concurrent.ExecutionException;
 
 public final class ModelFactory {
 
+    public static ClientCredModel getCurrentClient() {
+        return currentClient;
+    }
+
     //This is the current client for the model
     private static ClientCredModel currentClient;
 

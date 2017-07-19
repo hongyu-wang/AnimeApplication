@@ -21,6 +21,9 @@ public class ClientCredModel implements Serializable{
     }
 
 
+    public String getAccessToken() {
+        return accessToken;
+    }
 
     private String accessToken;
 
