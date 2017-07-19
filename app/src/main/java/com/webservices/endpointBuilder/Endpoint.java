@@ -1,7 +1,5 @@
 package com.webservices.endpointBuilder;
 
-import com.webservices.model.ModelSource;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +22,7 @@ import javax.security.cert.X509Certificate;
  * Created by hongy on 7/9/2017.
  */
 
-public class Endpoint implements ModelSource{
+public class Endpoint {
     private static final String BASE_ENDPOINT = "https://anilist.co/api/";
 
     /**
@@ -125,7 +123,6 @@ public class Endpoint implements ModelSource{
      *
      * @return json representation of the Anilist system
      */
-    @Override
     public String getJson() {
         fix();
         HttpsURLConnection connection;

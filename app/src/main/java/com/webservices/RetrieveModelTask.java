@@ -10,9 +10,12 @@ import com.webservices.model.ModelFactory;
  * Created by hongy on 7/9/2017.
  */
 
-public class RetrieveModelTask extends AsyncTask<String, Void, ClientCredModel> {
+public class RetrieveModelTask <T>   extends AsyncTask<Class<T>, Void, T> {
+
+    @SafeVarargs
     @Override
-    protected ClientCredModel doInBackground(String... params) {
-        return ModelFactory.getModel(ClientCredModel.class);
+    protected final T doInBackground(Class<T>... params) {
+
+        return ModelFactory.getModel(params[0]);
     }
 }

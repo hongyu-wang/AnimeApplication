@@ -27,7 +27,7 @@ public final class ModelFactory {
             method = className.getMethod("getQueryString");
 
 
-            ModelSource m = Endpoint.endpointFactory((QueryString) method.invoke(null));
+            Endpoint m = Endpoint.endpointFactory((QueryString) method.invoke(null));
             return GsonSingleton.get().fromJson(m.getJson(), className);
         } catch(Exception e){
             e.printStackTrace();
