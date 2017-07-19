@@ -1,4 +1,4 @@
-package com.webservices;
+package com.webservices.model;
 
 import android.os.AsyncTask;
 
