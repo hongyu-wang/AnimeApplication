@@ -52,7 +52,6 @@ public class Main extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-
                         menuItem.setChecked(true);
                         drawer.closeDrawers();
                         return true;
