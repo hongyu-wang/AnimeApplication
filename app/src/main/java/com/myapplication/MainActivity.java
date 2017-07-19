@@ -13,7 +13,7 @@ import com.webservices.model.ModelFactory;
 
 import java.util.concurrent.ExecutionException;
 
-public class Main extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private NavigationView navView;
     private Toolbar toolbar;
