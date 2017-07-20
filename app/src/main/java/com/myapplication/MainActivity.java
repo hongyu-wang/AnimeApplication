@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.webservices.model.ClientCredModel;
 import com.webservices.model.ModelFactory;
+import com.webservices.model.seriesEndpoints.AnimeModel;
 import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(ClientCredModel model){
         Log.d(TAG, "ClientCredEvent");
         ModelFactory.setCurrentClient(model);
-        ModelFactory.requestModelList(this, BasicSeriesModel.class, "Code+Geass");
+        ModelFactory.requestModelList(this, AnimeModel.class, "Code+Geass");
 
     }
 
     @Subscribe
-    public void onEvent(BasicSeriesModel [] model){
+    public void onEvent(AnimeModel [] model){
 
         Log.d(TAG, "huh");
     }
