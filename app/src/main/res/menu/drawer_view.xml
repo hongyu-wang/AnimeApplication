@@ -14,5 +14,8 @@
             android:id="@+id/nav_genres"
             android:icon="@drawable/ic_genre"
             android:title="@string/nav_genres" />
+        <item
+            android:id="@+id/nav_login_temp"
+            android:title="@string/login" />
     </group>
 </menu>

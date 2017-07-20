@@ -3,6 +3,8 @@ package com.myapplication;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.myapplication.fragments.BrowseFragment;
 import com.webservices.model.ClientCredModel;
 import com.webservices.model.ModelFactory;
 import com.webservices.model.seriesEndpoints.AnimeModel;
-import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(AnimeModel [] model){
-
         Log.d(TAG, "huh");
     }
 
@@ -76,12 +77,39 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        drawer.closeDrawers();
+                        selectItem(menuItem);
                         return true;
                     }
                 });
 
+    }
+
+    /**
+     * Navigation Drawer click logic
+     * @param item  MenuItem that was selected
+     */
+    public void selectItem(MenuItem item) {
+        Fragment fragment = null;
+        Class fragmentClass = BrowseFragment.class;
+        Bundle bundle = new Bundle();
+        switch (item.getItemId()) {
+            case R.id.nav_login_temp:
+                // Login
+                break;
+            default:
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                bundle.putInt("id", item.getItemId());
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.flPlaceholder, fragment).commit();
+        }
+        item.setChecked(true);
+        drawer.closeDrawers();
     }
 
     @Override
