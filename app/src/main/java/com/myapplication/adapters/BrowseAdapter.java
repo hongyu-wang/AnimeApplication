@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myapplication.R;
+import com.squareup.picasso.Picasso;
 import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 
 import java.util.List;
@@ -25,12 +26,14 @@ public class BrowseAdapter extends
 
 		public ImageView ivCover;
 		public TextView tvTitle;
+		public TextView tvRating;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
 
 			ivCover = (ImageView) itemView.findViewById(R.id.ivCover);
 			tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+			tvRating = (TextView) itemView.findViewById(R.id.tvRating);
 		}
 	}
 
@@ -61,7 +64,15 @@ public class BrowseAdapter extends
 
 		TextView tvTitle = holder.tvTitle;
 		tvTitle.setText(series.getTitleEnglish());
-		//TODO set cover image
+		TextView tvRating = holder.tvRating;
+		tvRating.setText(Double.toString(series.getAverageScore()));
+		ImageView ivCover = holder.ivCover;
+
+		// uses Picasso to download cover art
+		Picasso.with(getContext())
+				.load(series.getImageUrlMed())
+				.error(R.drawable.ic_placeholder_cover)
+				.into(ivCover);
 	}
 
 	@Override

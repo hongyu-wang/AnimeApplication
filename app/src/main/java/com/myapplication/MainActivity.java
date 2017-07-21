@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Navigation Drawer click logic
+     * BrowseFragment will be passed an argument stating which item was pressed by default
+     * otherwise, it will be handled case by case
      * @param item  MenuItem that was selected
      */
     public void selectItem(MenuItem item) {
@@ -133,16 +135,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 try {
-                fragment = (Fragment) fragmentClass.newInstance();
-                bundle.putInt("id", item.getItemId());
-                fragment.setArguments(bundle);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.flPlaceholder, fragment).commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+                    fragment = (Fragment) fragmentClass.newInstance();
+                    bundle.putInt("id", item.getItemId());
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.flPlaceholder, fragment).commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         item.setChecked(true);
         drawer.closeDrawers();

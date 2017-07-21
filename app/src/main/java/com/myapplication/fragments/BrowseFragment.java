@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 
 import com.myapplication.R;
 import com.myapplication.adapters.BrowseAdapter;
+import com.webservices.model.ModelFactory;
 import com.webservices.model.seriesEndpoints.BasicSeriesModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -29,9 +33,11 @@ public class BrowseFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		seriesList = getSeriesList();
-		// get series list here (depending on nav drawer selection?)
-		Log.d(TAG, Integer.toString(this.getArguments().getInt("id")));
+		int id = this.getArguments().getInt("id");
+		EventBus.getDefault().register(this);
+		//requestSeriesList();
+		// get series list here (depending on nav drawer selection)
+		Log.d(TAG, Integer.toString(id));
 	}
 
 	@Override
@@ -49,7 +55,15 @@ public class BrowseFragment extends Fragment {
 
 	}
 
-	public List<BasicSeriesModel> getSeriesList() {
-		return null;
+	public void requestSeriesList() {
+		ModelFactory.requestModelList(getContext(), BasicSeriesModel.class);
+	}
+
+
+	//TODO get this working
+	@Subscribe
+	public void onEvent(BasicSeriesModel[] seriesModel) {
+		Log.d(TAG, "hi");
+		// set series list here
 	}
 }
