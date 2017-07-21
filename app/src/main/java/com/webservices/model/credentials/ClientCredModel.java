@@ -1,7 +1,8 @@
-package com.webservices.model;
+package com.webservices.model.credentials;
 
 import com.singletons.CredentialSingleton;
 import com.webservices.endpointBuilder.QueryString;
+import com.webservices.model.Model;
 
 import java.io.Serializable;
 
@@ -22,11 +23,10 @@ public class ClientCredModel implements Model {
     }
 
 
-    public String getAccessToken() {
-        return accessToken;
-    }
 
     private String accessToken;
+
+
 
     private String tokenType;
 
@@ -34,6 +34,12 @@ public class ClientCredModel implements Model {
 
     private int expiresIn;
 
+    public String refreshToken;
+
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 
 
 }

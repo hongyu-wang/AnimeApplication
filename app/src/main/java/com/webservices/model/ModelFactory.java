@@ -7,17 +7,18 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.events.LoggedOn;
 import com.events.ModelFactoryInitialized;
 import com.singletons.GsonSingleton;
 import com.singletons.RequestQueueSingleton;
 import com.webservices.endpointBuilder.QueryString;
+import com.webservices.model.credentials.ClientCredModel;
+import com.webservices.model.credentials.UserCredentialModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -28,16 +29,16 @@ import java.lang.reflect.Method;
  */
 public class ModelFactory {
     private static final String TAG = "ModelFactory";
-    private final static String BASE_ENDPOINT = "https://anilist.co/api/";
+    public final static String BASE_ENDPOINT = "https://anilist.co/api/";
 
     //This is the inbuilt hidden modelFactory instance required for subscription to Eventbus
     private static ModelFactory modelFactory;
 
     //This is the current client model.
     private static ClientCredModel currentClient;
-    public static ClientCredModel getCurrentClient() {
-        return currentClient;
-    }
+
+    private static UserCredentialModel userCredentialModel;
+
 
     /**
      * This class is the initializer of ModelFactory. This should be called once on app start
@@ -52,15 +53,32 @@ public class ModelFactory {
         }
     }
 
+    public static UserCredentialModel getUserCredentialModel() {
+        return userCredentialModel;
+    }
+
+    public static ClientCredModel getCurrentClient() {
+        return currentClient;
+    }
+
+
     /**
      * This function is called when clientcredmodel is called.
      * @param model The model that exists
      */
     @Subscribe
-    public void onEvent(ClientCredModel model){
+    public void onClientEvent(ClientCredModel model){
         Log.d(TAG, "Received client cred model");
         currentClient = model;
         EventBus.getDefault().post(new ModelFactoryInitialized());
+    }
+
+    @Subscribe
+    public void onUserEvent(UserCredentialModel model){
+        Log.d(TAG, "Received user cred model");
+        userCredentialModel = model;
+        EventBus.getDefault().post(new LoggedOn(model.getAccess_token()));
+
     }
 
     //Private constructor as no instance of this (other than the private static instance) should exist

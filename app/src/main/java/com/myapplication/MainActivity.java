@@ -1,6 +1,8 @@
 package com.myapplication;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,18 +14,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.events.LoggedOn;
 import com.events.ModelFactoryInitialized;
 import com.myapplication.fragments.BrowseFragment;
-import com.webservices.model.ClientCredModel;
+import com.singletons.CredentialSingleton;
+import com.webservices.endpointBuilder.QueryString;
 import com.webservices.model.ModelFactory;
-import com.webservices.model.seriesEndpoints.AnimeModel;
+import com.webservices.model.credentials.UserCredentialModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
+import static com.android.volley.Request.Method.GET;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final String CALLBACK_URI = "AnimeApp://com.myapplication.MainActivity";
+
     private NavigationView navView;
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -34,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Main Activity Starting!");
-        EventBus.getDefault().register(this);
-        ModelFactory.init(this);
 
         setContentView(R.layout.activity_main);
         // Set up the navigation drawer
@@ -68,9 +73,36 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "ModelFactoryDone");
     }
 
+    @Subscribe
+    public void onLoggedOn(LoggedOn loggedOn){
+        Log.d(TAG, loggedOn.code);
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        EventBus.getDefault().register(this);
+        ModelFactory.init(this);
+
+
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            String access_token = uri.getQueryParameter("code");
+            ModelFactory.requestModel(this, UserCredentialModel.class, access_token);
+        }
     }
 
 
@@ -97,23 +129,34 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
             case R.id.nav_login_temp:
-                // Login
+                login();
                 break;
             default:
                 try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                    bundle.putInt("id", item.getItemId());
-                    fragment.setArguments(bundle);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.flPlaceholder, fragment).commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                fragment = (Fragment) fragmentClass.newInstance();
+                bundle.putInt("id", item.getItemId());
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.flPlaceholder, fragment).commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         }
         item.setChecked(true);
         drawer.closeDrawers();
+    }
+
+    private void login() {
+        QueryString qs = new QueryString("auth/authorize", GET);
+        qs.add("client_id", CredentialSingleton.get().getClientID());
+        qs.add("redirect_uri", CALLBACK_URI);
+        qs.add("response_type", "code");
+
+        String url = ModelFactory.BASE_ENDPOINT + qs.toString();
+        Intent openUrlIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(openUrlIntent);
     }
 
     @Override
