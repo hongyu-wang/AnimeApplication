@@ -2,6 +2,7 @@ package com.myapplication.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -28,14 +29,14 @@ public class BrowseFragment extends Fragment {
 
 	private RecyclerView rvBrowse;
 	private BrowseAdapter browseAdapter;
-	private List<BasicSeriesModel> seriesList;
+	private ArrayList<BasicSeriesModel> seriesList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		int id = this.getArguments().getInt("id");
 		EventBus.getDefault().register(this);
-		//requestSeriesList();
+		requestSeriesList();
 		// get series list here (depending on nav drawer selection)
 		Log.d(TAG, Integer.toString(id));
 	}
@@ -43,10 +44,8 @@ public class BrowseFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View layout = inflater.inflate(R.layout.generic_list_fragment_layout, parent, false);
-		//rvBrowse = (RecyclerView) layout.findViewById(R.id.rvList);
-		//browseAdapter = new BrowseAdapter(getActivity(), seriesList);
-		//rvBrowse.setAdapter(browseAdapter);
-		//rvBrowse.setLayoutManager(new LinearLayoutManager(getActivity()));
+		rvBrowse = (RecyclerView) layout.findViewById(R.id.rvList);
+
 		return layout;
 	}
 
@@ -56,14 +55,18 @@ public class BrowseFragment extends Fragment {
 	}
 
 	public void requestSeriesList() {
-		ModelFactory.requestModelList(getContext(), BasicSeriesModel.class);
+		ModelFactory.requestModel(getContext(), BasicSeriesModel.class, "1");
 	}
 
 
-	//TODO get this working
+	//TODO get this working for a list
 	@Subscribe
-	public void onEvent(BasicSeriesModel[] seriesModel) {
+	public void onEvent(BasicSeriesModel seriesModel) {
 		Log.d(TAG, "hi");
-		// set series list here
+		seriesList = new ArrayList<>();
+		seriesList.add(seriesModel);
+		browseAdapter = new BrowseAdapter(getActivity(), seriesList);
+		rvBrowse.setAdapter(browseAdapter);
+		rvBrowse.setLayoutManager(new LinearLayoutManager(getActivity()));
 	}
 }

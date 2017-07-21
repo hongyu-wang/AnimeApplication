@@ -20,7 +20,10 @@ public class BasicSeriesModel implements Model {
 
 
     public static QueryString getQueryString(String... args){
-        QueryString queryString = new QueryString("anime/search/" + args[0], GET);
+        // TODO change this back to "anime/search/"
+        // gson was throwing error, i think the model didnt fit the response (search returns list
+        // where as this returns a single series model (?)
+        QueryString queryString = new QueryString("anime/" + args[0], GET);
         queryString.add("access_token", ModelFactory.getCurrentClient().getAccessToken());
         return queryString;
     }
