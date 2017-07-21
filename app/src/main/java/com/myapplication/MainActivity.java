@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.events.ModelFactoryInitialized;
 import com.myapplication.fragments.BrowseFragment;
 import com.webservices.model.ClientCredModel;
 import com.webservices.model.ModelFactory;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Main Activity Starting!");
         EventBus.getDefault().register(this);
+        ModelFactory.init(this);
 
         setContentView(R.layout.activity_main);
         // Set up the navigation drawer
@@ -50,7 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
         drawer.addDrawerListener(drawerToggle);
         setupDrawerContent(navView);
-        ModelFactory.requestModel(this, ClientCredModel.class);
+    }
+
+    /**
+     * When this function is called, it implies that ModelFactory has been initialized
+     * and the app is ready for use.
+     *
+     * The app needs to display a loading screen before this function is called (or else we might be
+     * donezo ecksdee)
+     *
+     * @param initialized dummy marker object
+     */
+    @Subscribe
+    public void onModelFactoryInitialized(ModelFactoryInitialized initialized){
+        Log.d(TAG, "ModelFactoryDone");
     }
 
     @Override
@@ -58,19 +73,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    //Le spooky
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(ClientCredModel model){
-        Log.d(TAG, "ClientCredEvent");
-        ModelFactory.setCurrentClient(model);
-        ModelFactory.requestModelList(this, AnimeModel.class, "Code+Geass");
 
-    }
-
-    @Subscribe
-    public void onEvent(AnimeModel [] model){
-        Log.d(TAG, "huh");
-    }
 
     private void setupDrawerContent(NavigationView navView) {
         navView.setNavigationItemSelectedListener(
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item  MenuItem that was selected
      */
     public void selectItem(MenuItem item) {
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass = BrowseFragment.class;
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
@@ -99,14 +102,15 @@ public class MainActivity extends AppCompatActivity {
             default:
                 try {
                     fragment = (Fragment) fragmentClass.newInstance();
+                    bundle.putInt("id", item.getItemId());
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.flPlaceholder, fragment).commit();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                bundle.putInt("id", item.getItemId());
-                fragment.setArguments(bundle);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.flPlaceholder, fragment).commit();
+
         }
         item.setChecked(true);
         drawer.closeDrawers();
