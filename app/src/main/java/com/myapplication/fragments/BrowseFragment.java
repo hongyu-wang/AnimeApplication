@@ -17,25 +17,23 @@ import com.webservices.model.seriesEndpoints.BasicSeriesModel;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Darwin on 7/19/2017.
  */
 
 public class BrowseFragment extends Fragment {
-
+	private static final String TAG = "BrowseFragment";
 	private RecyclerView rvBrowse;
 	private BrowseAdapter browseAdapter;
-	private ArrayList<BasicSeriesModel> seriesList;
+	private List<BasicSeriesModel> seriesList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		int id = this.getArguments().getInt("id");
-		EventBus.getDefault().register(this);
 		requestSeriesList();
 		// get series list here (depending on nav drawer selection)
 		Log.d(TAG, Integer.toString(id));
@@ -45,7 +43,6 @@ public class BrowseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View layout = inflater.inflate(R.layout.generic_list_fragment_layout, parent, false);
 		rvBrowse = (RecyclerView) layout.findViewById(R.id.rvList);
-
 		return layout;
 	}
 
@@ -54,19 +51,30 @@ public class BrowseFragment extends Fragment {
 
 	}
 
-	public void requestSeriesList() {
-		ModelFactory.requestModel(getContext(), BasicSeriesModel.class, "1");
+	@Override
+	public void onPause(){
+		super.onPause();
+		EventBus.getDefault().unregister(this);
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		EventBus.getDefault().register(this);
+	}
+
+	public void requestSeriesList() {
+		ModelFactory.requestModelList(getContext(), BasicSeriesModel.class, "Code+Geass");
+	}
 
 	//TODO get this working for a list
 	@Subscribe
-	public void onEvent(BasicSeriesModel seriesModel) {
+	public void onEvent(BasicSeriesModel[] seriesModel) {
 		Log.d(TAG, "hi");
-		seriesList = new ArrayList<>();
-		seriesList.add(seriesModel);
-		browseAdapter = new BrowseAdapter(getActivity(), seriesList);
+		seriesList = Arrays.asList(seriesModel);
+		browseAdapter = new BrowseAdapter(getContext(), seriesList);
 		rvBrowse.setAdapter(browseAdapter);
 		rvBrowse.setLayoutManager(new LinearLayoutManager(getActivity()));
+		Log.d(TAG, "seriesList set");
 	}
 }
